@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+   <automata type="DEA">
+      <startState name="p2" />
+      <states>
+         <state name="p2" accepting="false" PositionX="390" PositionY="142" />
+         <state name="p1" accepting="false" PositionX="390" PositionY="256" />
+         <state name="p0" accepting="true" PositionX="390" PositionY="370" />
+      </states>
+      <transitions>
+         <transition start="p2" token="a" end="p1">
+            <controlpoint PositionX="390" PositionY="142" />
+            <controlpoint PositionX="390" PositionY="256" />
+         </transition>
+         <transition start="p1" token="a" end="p1">
+            <controlpoint PositionX="390" PositionY="256" />
+            <controlpoint PositionX="470" PositionY="336" />
+            <controlpoint PositionX="310" PositionY="336" />
+            <controlpoint PositionX="390" PositionY="256" />
+         </transition>
+         <transition start="p1" token="b" end="p0">
+            <controlpoint PositionX="390" PositionY="256" />
+            <controlpoint PositionX="390" PositionY="370" />
+         </transition>
+         <transition start="p2" token="b" end="p2">
+            <controlpoint PositionX="390" PositionY="142" />
+            <controlpoint PositionX="482" PositionY="209" />
+            <controlpoint PositionX="324" PositionY="234" />
+            <controlpoint PositionX="390" PositionY="142" />
+         </transition>
+         <transition start="p0" token="a" end="p0">
+            <controlpoint PositionX="390" PositionY="370" />
+            <controlpoint PositionX="343" PositionY="473" />
+            <controlpoint PositionX="288" PositionY="323" />
+            <controlpoint PositionX="390" PositionY="370" />
+         </transition>
+         <transition start="p0" token="b" end="p0">
+            <controlpoint PositionX="390" PositionY="370" />
+            <controlpoint PositionX="343" PositionY="473" />
+            <controlpoint PositionX="288" PositionY="323" />
+            <controlpoint PositionX="390" PositionY="370" />
+         </transition>
+      </transitions>
+      <alphabet>
+         <token>b</token>
+         <token>a</token>
+      </alphabet>
+   </automata>
+</model>
+

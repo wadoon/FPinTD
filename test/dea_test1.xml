@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+   <automata type="DEA">
+      <startState name="q0" />
+      <states>
+         <state name="q0" accepting="false" PositionX="276" PositionY="255" />
+         <state name="q1" accepting="true" PositionX="411" PositionY="254" />
+         <state name="q2" accepting="false" PositionX="345" PositionY="372" />
+      </states>
+      <transitions>
+         <transition start="q0" token="b" end="q1">
+            <controlpoint PositionX="276" PositionY="255" />
+            <controlpoint PositionX="344" PositionY="274" />
+            <controlpoint PositionX="411" PositionY="254" />
+         </transition>
+         <transition start="q0" token="a" end="q2">
+            <controlpoint PositionX="276" PositionY="255" />
+            <controlpoint PositionX="293" PositionY="324" />
+            <controlpoint PositionX="345" PositionY="372" />
+         </transition>
+         <transition start="q2" token="b" end="q1">
+            <controlpoint PositionX="345" PositionY="372" />
+            <controlpoint PositionX="396" PositionY="322" />
+            <controlpoint PositionX="411" PositionY="254" />
+         </transition>
+         <transition start="q2" token="a" end="q0">
+            <controlpoint PositionX="345" PositionY="372" />
+            <controlpoint PositionX="328" PositionY="303" />
+            <controlpoint PositionX="276" PositionY="255" />
+         </transition>
+         <transition start="q1" token="a" end="q2">
+            <controlpoint PositionX="411" PositionY="254" />
+            <controlpoint PositionX="361" PositionY="303" />
+            <controlpoint PositionX="345" PositionY="372" />
+         </transition>
+         <transition start="q1" token="b" end="q0">
+            <controlpoint PositionX="411" PositionY="254" />
+            <controlpoint PositionX="343" PositionY="234" />
+            <controlpoint PositionX="276" PositionY="255" />
+         </transition>
+      </transitions>
+      <alphabet>
+         <token>b</token>
+         <token>a</token>
+      </alphabet>
+   </automata>
+</model>
+

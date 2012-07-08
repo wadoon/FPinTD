@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+   <automata type="DEA">
+      <startState name="p1|p1" />
+      <states>
+         <state name="p0|p3" accepting="true" PositionX="328" PositionY="200" />
+         <state name="p0|p4" accepting="false" PositionX="532" PositionY="67" />
+         <state name="p0|p1" accepting="false" PositionX="383" PositionY="200" />
+         <state name="p0|p2" accepting="false" PositionX="538" PositionY="266" />
+         <state name="p0|p0" accepting="false" PositionX="179" PositionY="266" />
+         <state name="p3|p2" accepting="true" PositionX="577" PositionY="398" />
+         <state name="p3|p3" accepting="true" PositionX="105" PositionY="200" />
+         <state name="p3|p0" accepting="true" PositionX="439" PositionY="200" />
+         <state name="p3|p1" accepting="true" PositionX="216" PositionY="200" />
+         <state name="p4|p0" accepting="false" PositionX="423" PositionY="67" />
+         <state name="p3|p4" accepting="true" PositionX="328" PositionY="134" />
+         <state name="p4|p3" accepting="true" PositionX="595" PositionY="134" />
+         <state name="p4|p4" accepting="false" PositionX="144" PositionY="332" />
+         <state name="p4|p1" accepting="false" PositionX="539" PositionY="134" />
+         <state name="p4|p2" accepting="false" PositionX="455" PositionY="332" />
+         <state name="p1|p0" accepting="false" PositionX="539" PositionY="200" />
+         <state name="p1|p1" accepting="false" PositionX="173" PositionY="398" />
+         <state name="p1|p4" accepting="false" PositionX="383" PositionY="134" />
+         <state name="p1|p2" accepting="false" PositionX="474" PositionY="398" />
+         <state name="p1|p3" accepting="true" PositionX="161" PositionY="200" />
+         <state name="p2|p4" accepting="false" PositionX="367" PositionY="332" />
+         <state name="p2|p3" accepting="true" PositionX="272" PositionY="200" />
+         <state name="p2|p1" accepting="false" PositionX="354" PositionY="398" />
+         <state name="p2|p0" accepting="false" PositionX="328" PositionY="266" />
+         <state name="p2|p2" accepting="false" PositionX="278" PositionY="464" />
+      </states>
+      <transitions>
+         <transition start="p3|p3" token="a" end="p0|p0">
+            <controlpoint PositionX="105" PositionY="200" />
+            <controlpoint PositionX="179" PositionY="266" />
+         </transition>
+         <transition start="p2|p3" token="b" end="p2|p2">
+            <controlpoint PositionX="272" PositionY="200" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p2|p3" token="a" end="p2|p0">
+            <controlpoint PositionX="272" PositionY="200" />
+            <controlpoint PositionX="328" PositionY="266" />
+         </transition>
+         <transition start="p0|p0" token="a" end="p2|p2">
+            <controlpoint PositionX="179" PositionY="266" />
+            <controlpoint PositionX="181" PositionY="289" />
+            <controlpoint PositionX="186" PositionY="320" />
+            <controlpoint PositionX="198" PositionY="379" />
+            <controlpoint PositionX="226" PositionY="421" />
+            <controlpoint PositionX="233" PositionY="432" />
+            <controlpoint PositionX="244" PositionY="441" />
+            <controlpoint PositionX="253" PositionY="449" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p1|p0" token="a" end="p0|p2">
+            <controlpoint PositionX="539" PositionY="200" />
+            <controlpoint PositionX="538" PositionY="266" />
+         </transition>
+         <transition start="p0|p4" token="a" end="p2|p1">
+            <controlpoint PositionX="532" PositionY="67" />
+            <controlpoint PositionX="522" PositionY="88" />
+            <controlpoint PositionX="519" PositionY="95" />
+            <controlpoint PositionX="514" PositionY="103" />
+            <controlpoint PositionX="511" PositionY="111" />
+            <controlpoint PositionX="463" PositionY="221" />
+            <controlpoint PositionX="465" PositionY="258" />
+            <controlpoint PositionX="394" PositionY="355" />
+            <controlpoint PositionX="389" PositionY="363" />
+            <controlpoint PositionX="381" PositionY="371" />
+            <controlpoint PositionX="374" PositionY="378" />
+            <controlpoint PositionX="354" PositionY="398" />
+         </transition>
+         <transition start="p0|p1" token="a" end="p2|p0">
+            <controlpoint PositionX="383" PositionY="200" />
+            <controlpoint PositionX="328" PositionY="266" />
+         </transition>
+         <transition start="p3|p2" token="b" end="p2|p2">
+            <controlpoint PositionX="577" PositionY="398" />
+            <controlpoint PositionX="560" PositionY="413" />
+            <controlpoint PositionX="556" PositionY="416" />
+            <controlpoint PositionX="551" PositionY="419" />
+            <controlpoint PositionX="546" PositionY="421" />
+            <controlpoint PositionX="464" PositionY="455" />
+            <controlpoint PositionX="357" PositionY="462" />
+            <controlpoint PositionX="306" PositionY="463" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p1|p1" token="a" end="p0|p0">
+            <controlpoint PositionX="173" PositionY="398" />
+            <controlpoint PositionX="179" PositionY="266" />
+         </transition>
+         <transition start="p2|p2" token="b" end="p2|p2">
+            <controlpoint PositionX="278" PositionY="464" />
+            <controlpoint PositionX="289" PositionY="400" />
+            <controlpoint PositionX="342" PositionY="476" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p2|p2" token="a" end="p2|p2">
+            <controlpoint PositionX="278" PositionY="464" />
+            <controlpoint PositionX="289" PositionY="400" />
+            <controlpoint PositionX="342" PositionY="476" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p0|p4" token="b" end="p4|p3">
+            <controlpoint PositionX="532" PositionY="67" />
+            <controlpoint PositionX="595" PositionY="134" />
+         </transition>
+         <transition start="p1|p4" token="b" end="p2|p3">
+            <controlpoint PositionX="383" PositionY="134" />
+            <controlpoint PositionX="272" PositionY="200" />
+         </transition>
+         <transition start="p0|p3" token="b" end="p4|p2">
+            <controlpoint PositionX="328" PositionY="200" />
+            <controlpoint PositionX="455" PositionY="332" />
+         </transition>
+         <transition start="p4|p3" token="b" end="p3|p2">
+            <controlpoint PositionX="595" PositionY="134" />
+            <controlpoint PositionX="596" PositionY="156" />
+            <controlpoint PositionX="599" PositionY="196" />
+            <controlpoint PositionX="602" PositionY="283" />
+            <controlpoint PositionX="590" PositionY="355" />
+            <controlpoint PositionX="590" PositionY="360" />
+            <controlpoint PositionX="588" PositionY="366" />
+            <controlpoint PositionX="586" PositionY="371" />
+            <controlpoint PositionX="577" PositionY="398" />
+         </transition>
+         <transition start="p2|p4" token="a" end="p2|p1">
+            <controlpoint PositionX="367" PositionY="332" />
+            <controlpoint PositionX="354" PositionY="398" />
+         </transition>
+         <transition start="p1|p2" token="b" end="p2|p2">
+            <controlpoint PositionX="474" PositionY="398" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p4|p4" token="a" end="p1|p1">
+            <controlpoint PositionX="144" PositionY="332" />
+            <controlpoint PositionX="173" PositionY="398" />
+         </transition>
+         <transition start="p2|p4" token="b" end="p2|p3">
+            <controlpoint PositionX="367" PositionY="332" />
+            <controlpoint PositionX="369" PositionY="309" />
+            <controlpoint PositionX="371" PositionY="290" />
+            <controlpoint PositionX="370" PositionY="262" />
+            <controlpoint PositionX="356" PositionY="243" />
+            <controlpoint PositionX="339" PositionY="222" />
+            <controlpoint PositionX="323" PositionY="235" />
+            <controlpoint PositionX="300" PositionY="222" />
+            <controlpoint PositionX="298" PositionY="221" />
+            <controlpoint PositionX="296" PositionY="220" />
+            <controlpoint PositionX="293" PositionY="218" />
+            <controlpoint PositionX="272" PositionY="200" />
+         </transition>
+         <transition start="p4|p2" token="a" end="p1|p2">
+            <controlpoint PositionX="455" PositionY="332" />
+            <controlpoint PositionX="474" PositionY="398" />
+         </transition>
+         <transition start="p1|p1" token="b" end="p2|p2">
+            <controlpoint PositionX="173" PositionY="398" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p3|p3" token="b" end="p2|p2">
+            <controlpoint PositionX="105" PositionY="200" />
+            <controlpoint PositionX="101" PositionY="222" />
+            <controlpoint PositionX="95" PositionY="267" />
+            <controlpoint PositionX="88" PositionY="370" />
+            <controlpoint PositionX="145" PositionY="421" />
+            <controlpoint PositionX="174" PositionY="447" />
+            <controlpoint PositionX="220" PositionY="457" />
+            <controlpoint PositionX="249" PositionY="461" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p3|p0" token="a" end="p0|p2">
+            <controlpoint PositionX="439" PositionY="200" />
+            <controlpoint PositionX="538" PositionY="266" />
+         </transition>
+         <transition start="p3|p4" token="a" end="p0|p1">
+            <controlpoint PositionX="328" PositionY="134" />
+            <controlpoint PositionX="383" PositionY="200" />
+         </transition>
+         <transition start="p4|p2" token="b" end="p3|p2">
+            <controlpoint PositionX="455" PositionY="332" />
+            <controlpoint PositionX="577" PositionY="398" />
+         </transition>
+         <transition start="p0|p2" token="b" end="p4|p2">
+            <controlpoint PositionX="538" PositionY="266" />
+            <controlpoint PositionX="455" PositionY="332" />
+         </transition>
+         <transition start="p4|p3" token="a" end="p1|p0">
+            <controlpoint PositionX="595" PositionY="134" />
+            <controlpoint PositionX="539" PositionY="200" />
+         </transition>
+         <transition start="p1|p2" token="a" end="p0|p2">
+            <controlpoint PositionX="474" PositionY="398" />
+            <controlpoint PositionX="487" PositionY="380" />
+            <controlpoint PositionX="492" PositionY="372" />
+            <controlpoint PositionX="498" PositionY="363" />
+            <controlpoint PositionX="502" PositionY="355" />
+            <controlpoint PositionX="513" PositionY="334" />
+            <controlpoint PositionX="522" PositionY="311" />
+            <controlpoint PositionX="529" PositionY="293" />
+            <controlpoint PositionX="538" PositionY="266" />
+         </transition>
+         <transition start="p0|p2" token="a" end="p2|p2">
+            <controlpoint PositionX="538" PositionY="266" />
+            <controlpoint PositionX="540" PositionY="289" />
+            <controlpoint PositionX="542" PositionY="322" />
+            <controlpoint PositionX="539" PositionY="387" />
+            <controlpoint PositionX="502" PositionY="421" />
+            <controlpoint PositionX="474" PositionY="447" />
+            <controlpoint PositionX="360" PositionY="458" />
+            <controlpoint PositionX="306" PositionY="462" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p0|p3" token="a" end="p2|p0">
+            <controlpoint PositionX="328" PositionY="200" />
+            <controlpoint PositionX="328" PositionY="266" />
+         </transition>
+         <transition start="p2|p0" token="a" end="p2|p2">
+            <controlpoint PositionX="328" PositionY="266" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p2|p0" token="b" end="p2|p4">
+            <controlpoint PositionX="328" PositionY="266" />
+            <controlpoint PositionX="367" PositionY="332" />
+         </transition>
+         <transition start="p1|p3" token="a" end="p0|p0">
+            <controlpoint PositionX="161" PositionY="200" />
+            <controlpoint PositionX="179" PositionY="266" />
+         </transition>
+         <transition start="p1|p4" token="a" end="p0|p1">
+            <controlpoint PositionX="383" PositionY="134" />
+            <controlpoint PositionX="383" PositionY="200" />
+         </transition>
+         <transition start="p0|p0" token="b" end="p4|p4">
+            <controlpoint PositionX="179" PositionY="266" />
+            <controlpoint PositionX="144" PositionY="332" />
+         </transition>
+         <transition start="p4|p1" token="b" end="p3|p2">
+            <controlpoint PositionX="539" PositionY="134" />
+            <controlpoint PositionX="553" PositionY="152" />
+            <controlpoint PositionX="559" PositionY="159" />
+            <controlpoint PositionX="564" PositionY="168" />
+            <controlpoint PositionX="567" PositionY="177" />
+            <controlpoint PositionX="588" PositionY="243" />
+            <controlpoint PositionX="584" PositionY="327" />
+            <controlpoint PositionX="581" PositionY="370" />
+            <controlpoint PositionX="577" PositionY="398" />
+         </transition>
+         <transition start="p1|p0" token="b" end="p2|p4">
+            <controlpoint PositionX="539" PositionY="200" />
+            <controlpoint PositionX="367" PositionY="332" />
+         </transition>
+         <transition start="p4|p0" token="b" end="p3|p4">
+            <controlpoint PositionX="423" PositionY="67" />
+            <controlpoint PositionX="328" PositionY="134" />
+         </transition>
+         <transition start="p0|p1" token="b" end="p4|p2">
+            <controlpoint PositionX="383" PositionY="200" />
+            <controlpoint PositionX="401" PositionY="214" />
+            <controlpoint PositionX="404" PositionY="217" />
+            <controlpoint PositionX="408" PositionY="220" />
+            <controlpoint PositionX="411" PositionY="222" />
+            <controlpoint PositionX="425" PositionY="232" />
+            <controlpoint PositionX="433" PositionY="229" />
+            <controlpoint PositionX="441" PositionY="243" />
+            <controlpoint PositionX="452" PositionY="261" />
+            <controlpoint PositionX="456" PositionY="285" />
+            <controlpoint PositionX="456" PositionY="303" />
+            <controlpoint PositionX="455" PositionY="332" />
+         </transition>
+         <transition start="p3|p1" token="b" end="p2|p2">
+            <controlpoint PositionX="216" PositionY="200" />
+            <controlpoint PositionX="229" PositionY="218" />
+            <controlpoint PositionX="234" PositionY="226" />
+            <controlpoint PositionX="239" PositionY="235" />
+            <controlpoint PositionX="242" PositionY="243" />
+            <controlpoint PositionX="255" PositionY="278" />
+            <controlpoint PositionX="269" PositionY="385" />
+            <controlpoint PositionX="274" PositionY="436" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p3|p4" token="b" end="p2|p3">
+            <controlpoint PositionX="328" PositionY="134" />
+            <controlpoint PositionX="272" PositionY="200" />
+         </transition>
+         <transition start="p2|p1" token="a" end="p2|p0">
+            <controlpoint PositionX="354" PositionY="398" />
+            <controlpoint PositionX="346" PositionY="377" />
+            <controlpoint PositionX="343" PositionY="370" />
+            <controlpoint PositionX="340" PositionY="362" />
+            <controlpoint PositionX="339" PositionY="355" />
+            <controlpoint PositionX="334" PositionY="335" />
+            <controlpoint PositionX="331" PositionY="312" />
+            <controlpoint PositionX="329" PositionY="294" />
+            <controlpoint PositionX="328" PositionY="266" />
+         </transition>
+         <transition start="p4|p0" token="a" end="p1|p2">
+            <controlpoint PositionX="423" PositionY="67" />
+            <controlpoint PositionX="433" PositionY="88" />
+            <controlpoint PositionX="443" PositionY="109" />
+            <controlpoint PositionX="459" PositionY="145" />
+            <controlpoint PositionX="467" PositionY="177" />
+            <controlpoint PositionX="481" PositionY="235" />
+            <controlpoint PositionX="480" PositionY="250" />
+            <controlpoint PositionX="483" PositionY="309" />
+            <controlpoint PositionX="484" PositionY="330" />
+            <controlpoint PositionX="485" PositionY="335" />
+            <controlpoint PositionX="483" PositionY="355" />
+            <controlpoint PositionX="483" PositionY="360" />
+            <controlpoint PositionX="482" PositionY="365" />
+            <controlpoint PositionX="481" PositionY="370" />
+            <controlpoint PositionX="474" PositionY="398" />
+         </transition>
+         <transition start="p1|p3" token="b" end="p2|p2">
+            <controlpoint PositionX="161" PositionY="200" />
+            <controlpoint PositionX="178" PositionY="215" />
+            <controlpoint PositionX="189" PositionY="225" />
+            <controlpoint PositionX="202" PositionY="237" />
+            <controlpoint PositionX="206" PositionY="243" />
+            <controlpoint PositionX="209" PositionY="247" />
+            <controlpoint PositionX="251" PositionY="379" />
+            <controlpoint PositionX="269" PositionY="437" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p4|p1" token="a" end="p1|p0">
+            <controlpoint PositionX="539" PositionY="134" />
+            <controlpoint PositionX="539" PositionY="200" />
+         </transition>
+         <transition start="p2|p1" token="b" end="p2|p2">
+            <controlpoint PositionX="354" PositionY="398" />
+            <controlpoint PositionX="278" PositionY="464" />
+         </transition>
+         <transition start="p3|p0" token="b" end="p2|p4">
+            <controlpoint PositionX="439" PositionY="200" />
+            <controlpoint PositionX="423" PositionY="217" />
+            <controlpoint PositionX="417" PositionY="224" />
+            <controlpoint PositionX="409" PositionY="234" />
+            <controlpoint PositionX="403" PositionY="243" />
+            <controlpoint PositionX="392" PositionY="263" />
+            <controlpoint PositionX="382" PositionY="287" />
+            <controlpoint PositionX="375" PositionY="305" />
+            <controlpoint PositionX="367" PositionY="332" />
+         </transition>
+         <transition start="p4|p4" token="b" end="p3|p3">
+            <controlpoint PositionX="144" PositionY="332" />
+            <controlpoint PositionX="105" PositionY="200" />
+         </transition>
+         <transition start="p3|p2" token="a" end="p0|p2">
+            <controlpoint PositionX="577" PositionY="398" />
+            <controlpoint PositionX="538" PositionY="266" />
+         </transition>
+         <transition start="p3|p1" token="a" end="p0|p0">
+            <controlpoint PositionX="216" PositionY="200" />
+            <controlpoint PositionX="179" PositionY="266" />
+         </transition>
+      </transitions>
+      <alphabet>
+         <token>b</token>
+         <token>a</token>
+      </alphabet>
+   </automata>
+</model>
+
