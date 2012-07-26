@@ -1,0 +1,442 @@
+0 # -*- encoding: utf-8 -*-
+0 """
+0 
++ """
+0 
++ import os,sys
++ import trap
++ import itertools
++ import tempfile
+0 
++ from itertools import product as xproduct
++ from functools import reduce
+0 
+0 
++ __author__ = 'weigla'
++ __date__ = '2012-05-09'
+0 
+0 
++ __all__ = ["DEA", "iterwords", "lazyiter", "iterable","tarjan2dict"]
+0 
++ Py3k = sys.version_info.major == 3
+0 
+0 
++ def iterable(obj):
+0     """
+0     test if @obj is iterable.
+0     :param obj:
+0     :return: true iff. __iter__() exists in @obj
+0     """
++     return hasattr(obj , "__iter__")
+0 
++ def lazyiter(obj):
+0     """
+0     >>> for a in lazyiter([1 ,2, 3]): print a
+0     1
+0     2
+0     3
+0 
+0     >>> for a in lazyiter(1): print a
+0     1
+0     """
++     if iterable(obj) and type(obj) is not tuple:  #tuple constraint for product automata
++         return obj
+0     else:
++         return (obj , )
+0 
++ def iterwords(s):
+0     """
+0     A function for a convinient iteration over words \in Sigma^*.
+0 
+0     >>> iterwords("abc")
+0     ("a" , "b" , "c")
+0 
+0     >>> iterwords( ["ab" , "de" , "aq])
+0     ["ab" , "de" , "aq])
+0 
+0     """
++     if type(s) in (list ,  tuple):
++         return s
++     elif type(s) is str:
++         return list(s)
+0     else:
+-         return [s,]
+0 
+0 
++ def tarjan2dict(sCC):
++     d = {}
++     for c in sCC:
++         a = set(c)
++         for node in a:
++             d[node] = a
++     return d
+0 
+0 
++ class DEA(object):
+0     """
+0     Wrapper for TrAP DFAs. TrAP DFAs are list with five elements [Q,A,d, s, F].
+0     This class provides a convinient way to acccess the elements by name
+0     and functions on DFAs.
+0 
+0     This class should be handled immutable.
++     """
+0 
++     def __init__(self, init):
++         if type(init) is str:
++             init = trap.load(init)
+0 
++         self._revDEA =  None
++         self._reachables = None
++         self._reachables = None
++         self._productautomata = {1:self} # memoization for productautomata
+0 
++         self._Q, self._A, self._d, self._s, self._F = init
+0 
+0 
++     @property
+0     def Q(self):
+0         """
+0         set of states
+0         """
++         return self._Q
+0 
++     @property
+0     def A(self):
+0         """
+0         alphabet -- set of symbols
+0         """
++         return self._A
+0 
++     @property
+0     def d(self):
+0         """
+0         transition table (dict)
+0         """
++         return self._d
+0 
++     @property
+0     def s(self):
+0         """
+0         start state with @self.s in @self.Q
+0         """
++         return self._s
+0 
++     @property
+0     def F(self):
+0         """
+0         set of accepting states
+0         """
++         return self._F
+0 
++     @property
+0     def reverse(self):
+0         """get the reverse dea"""
++         if self._revDEA is None:
++             self._revDEA =  DEAr(self)
++         return self._revDEA
+0 
++     def __invert__(self):
++         return self.reverse
+0 
++     def __iter__(self):
++         return iter(self._tuple())
+0 
++     def _tuple(self):
+0         """Provides the element in an five-tuple form"""
++         return (self.Q, self.A, self.d, self.s, self.F)
+0 
++     def __str__(self):
++         return str(self._tuple())
+0 
++     def __repr__(self):
++         return "dea.DEA(%s)" % repr(self._tuple())
+0 
++     def __contains__(self,obj):
++         if obj in self.Q:
++             return True
+0 
++         if type(obj) is tuple and len(obj) == 3:
++             s,w,e = obj
++             return self.d[s,w] == e
+0 
++         return False
+0 
++     def __pow__(self, amount):
++         if amount in self._productautomata:
+-             return self._productautomata[amount]
+0 
++         Q = set( xproduct( self.Q, repeat = amount))
++         delta = { (q,a) : tuple( map( lambda s: self.d[s,a] , q) )
++                   for q in Q
++                   for a in self.A}
+0 
++         q0 = tuple(itertools.repeat( self.s, amount ))
++         dea = DEA((Q, self.A, delta, q0, set()))
+0 
++         self._productautomata[amount] = dea
++         return dea
+0 
+0 
++     def __call__(self ,  state , symbol = None, error = True):
+0 
++         if symbol == None:
++             symbol = state
++             state = self.s
+0 
+0         #print(self.A,symbol, repr(list(map(lambda s: s in self.A , iterwords(symbol)))))
++         if not all( map(lambda s: s in self.A , iterwords(symbol))):
+-             raise Exception("some char of " +str(symbol) + " is not in "+ str(self.A))
+0 
+0 
++         try:
++             if state in self.Q:
++                 l = [state] + iterwords(symbol)
++                 return reduce(lambda q , s:  self.d[q , s] , l)
++             elif iterable(state): #\hat \delta  for tuple
++                 return tuple(map( lambda s: self(s , symbol) ,  state))
+0             else:
++                 raise Exception("state not in self.Q nor iterable")
++         except BaseException as e:
++             if error:
++                 raise e
+0             else:
++                 return []
+0 
+0 
++     def __eq__(self, dea):
+0         #convert tuple or list
++         if type(dea) in (list,tuple) and len(dea) == 5:
++             dea = DEA(dea)
+0 
+0         #cmp only within DEA
++         if type(dea) is not DEA:
+-             return False
+0 
+0         #quick test with id(…)
++         if id(self) == id(dea):
++             return True
+0 
++         return all( (self.Q == dea.Q,
++                     self.A == dea.A,
++                     self.d == dea.d,
++                     self.s == dea.s,
++                     self.F == dea.F))
+0 
++     def todot(self):
+-         fmt_acceptable = "\t%s [shape=doublecircle]\n"
+-         fmt_line       = "\t%s -> %s [label=%s] \n"
+0         header ="""
+0 digraph G {
+0 	/* left to right */
+0 	graph [rankdir=LR]
+0 	node [filled=false, shape=circle]
+0 	//start edge
+0 	start [filled=false, color=white, label=""]
+0 
+- """
+0 
+-         fil = tempfile.mktemp()
+-         with open(fil+".dot",'w') as f:
+-             f.write(header)
+-             for s,target in self.d.items():
+-                 start, sign = s
+-                 f.write(fmt_line % (start,target, sign ))
+-             for q in self.F:
+-                 f.write(fmt_acceptable % q)
+-             f.write("start -> %s\n" % self.s)
+-             f.write("}")
+0 
+-         cmd = "dot -Tpng -o %s.png %s.dot" % (fil,fil)
+-         print("Starting: ", cmd)
+-         os.popen(cmd)
+-         cmd = "eog %s.png" % fil
+-         os.popen(cmd)
+0 
+0 
++     def tarjan(self):
+0         """
+0         Tarjan's Algorithm for strongly connected components.
+0         origin version can be found here: http://www.logarithmic.net/pfh-files/blog/01208083168/sort.py
+0         see [ItA]_
+0 
+0         :return:
+0         """
++         result = []
++         stack  = []
++         low    = {}
+0 
++         graph = { node : set()  for node, sign in self._d.keys() }
+0 
++         for s,e in self._d.items():
++             graph[s[0]].add(e)
+0 
+0 
++         def visit(node):
++             if node in low: return
+0 
++             num = len(low)
++             low[node] = num
++             stack_pos = len(stack)
++             stack.append(node)
+0 
++             for successor in graph[node]:
++                 visit(successor)
++                 low[node] = min(low[node], low[successor])
+0 
++             if num == low[node]:
++                 component = tuple(stack[stack_pos:])
++                 del stack[stack_pos:]
++                 result.append(component)
++                 for item in component:
++                     low[item] = len(graph)
+0 
++         visit(self.s)
+0 
++         return result
+0 
+0 
++     def sCC(self):
+0         """
+0         strong connected components
+0         """
++         Z =  {}
++         f =  {}
++         g =  {}
+0 
++         for q in self.Q:
++             a =  dict(self.search(q , True))
++             b =  dict(self.reverse.search(q ,  True))
+0 
++             if Py3k:
+-                 Z[q] =  a.keys() &  b.keys()
+0             else:
++                 Z[q] =  set(a.keys()) &  set(b.keys())
+0 
+0 
++             f.update( {  (q , p):  a[p] for p in a.keys() if p in Z[q] })
++             g.update( {  (q , p):  b[p] for p in a.keys() if p in Z[q] })
+0 
++         return Z , f , g
+0 
+0 
++     def search(self , start_node , with_start = False, alphabet = None):
+0         """breadth first search on the transitiondiagram.
+0 
+0         :param start_node: node to begin the BFS.
+0         :param with_start: should @start_node be returned, too
+0         :param alphabet: the alphabet that should be used
+0         """
++         if alphabet is None:
++             alphabet =  self.A
+0 
++         assert alphabet <= self.A
+0         #assert start_node in self.Q
+0 
++         queue     =  [start_node]
++         reached   =  set()
++         witnesses =  { start_node:  ""}
+0 
++         if with_start:
+0             #reached.add(start_node) #not important
++             yield start_node ,  ""
+0 
++         while queue:
++             current =  queue.pop()
++             for a in alphabet:
++                 reachables =  self(current , a , False)
+0                 #TODO maybe better if check for reachable in Q
++                 for new in lazyiter(reachables):  # only for support of reverse dea
++                     if new not in reached:
++                         reached.add(new)
++                         witnesses[new] =  witnesses[current] + a
++                         queue.append(new)
++                         yield new ,  witnesses[new]
+0 
+0 
++     def reachable(self, start, end, reflexive = False):
+0         """
+0         :param start:
+0         :param end:
+0         :param reflexive:
+0         :return:
+0         """
++         for reached, word in self.search(start, reflexive):
++             if reached == end:
++                 return word
++         return False
+0 
+0 
++     def trivialComponents(self):
+0         """
+0         :return:
+0         """
++         def noLeavingEdges(c):
++             leavingEdges = ( self(c,a) != c for a in self.A )
++             return all( leavingEdges )
+0 
++         sCC = self.tarjan()
++         T = set()
++         for comp in sCC:
++             if len(comp) == 1 and noLeavingEdges(comp[0]):
+-                 T.add(comp[0])
+0 
++         return T
+0 
+0 
++     def inEquality(self):
++         q = -1
++         Arev = ~(self**2)
+0 
++         new_delta = Arev.d.copy()
++         for a in self.A:
++             new_delta[(q,q), a] = set()
++             for p in xproduct(self.F,(self.Q - self.F)):
++                 new_delta[(q,q), a].add(p)
+0 
++         tmpQ = self.Q.copy()
++         tmpQ.add((q,q))
+0 
++         tmpA = DEA((tmpQ, self.A, new_delta, self.s, self.F))
++         Z = set(); witness = {}
++         for state,word in tmpA.search((q,q), False):
++             Z.add(state)
++             witness[state] = word[1:][::-1]
++         return Z,witness
+0 
++ class DEAr(DEA):
+0     """
+0     Should not constructed directly by the user.
+0 
+0     >>> d =  DEA("dea1.xml")
+0     >>> r =  ~d
++     """
+0     #__slots__ =  ["_Q" , "_A" ,  "_d" ,  "_s" ,  "_F" ,  "_dea"]
+0 
++     def __init__(self , dea):
+0         """
+0         Constructs the reverse dea from @dea.
+0          You should not need to call this directly.
+0          Consider the use of @~dea@ for generating the reverse dea.
+0         :param dea: DEA
+0         """
++         self._Q =  dea.Q
++         self._A =  dea.A
++         self._s =  dea.F
++         self._F =  {dea.s}
+0 
++         self._d =  dict()
+0 
++         for q in dea.Q:
++             for a in dea.A:
++                 p =  dea.d[q , a]
+0                 #print(" %s - %s ->%s" % (p , a , q))
++                 try:
++                     self._d[p , a].add(q)
++                 except KeyError:
++                     self._d[p , a] =  {q}
+0 
++         self._reachables = None
+0 
++     def __invert__(self):
+-         return self._dea
+0 

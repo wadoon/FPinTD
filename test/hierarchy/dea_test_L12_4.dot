@@ -1,0 +1,30 @@
+digraph G {
+graph [rankdir=LR]
+node [filled=false, shape=circle]
+start [filled=false, color=white, label=""]
+p0 -> p2 [label="a";
+p6 -> p2 [label="a";
+p1 -> p2 [label="a";
+p2 -> p5 [label="a";
+p6 -> p3 [label="c";
+p5 -> p4 [label="b";
+p0 -> p1 [label="b";
+p4 -> p1 [label="b";
+p3 -> p1 [label="b";
+p6 -> p1 [label="b";
+p5 -> p6 [label="c";
+p1 -> p1 [label="b";
+p1 -> p3 [label="c";
+p0 -> p3 [label="c";
+p2 -> p6 [label="c";
+p2 -> p4 [label="b";
+p3 -> p2 [label="a";
+p4 -> p3 [label="c";
+p4 -> p2 [label="a";
+p3 -> p3 [label="c";
+p5 -> p5 [label="a";
+p6 [shape=doublecircle];
+p5 [shape=doublecircle];
+p4 [shape=doublecircle];
+start -> p0;
+}

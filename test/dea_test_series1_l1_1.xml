@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+   <automata type="DEA">
+      <startState name="p1" />
+      <states>
+         <state name="p2" accepting="true" PositionX="653" PositionY="409" />
+         <state name="p1" accepting="false" PositionX="521" PositionY="410" />
+         <state name="p0" accepting="false" PositionX="588" PositionY="524" />
+      </states>
+      <transitions>
+         <transition start="p1" token="a" end="p2">
+            <controlpoint PositionX="521" PositionY="410" />
+            <controlpoint PositionX="653" PositionY="409" />
+         </transition>
+         <transition start="p1" token="b" end="p0">
+            <controlpoint PositionX="521" PositionY="410" />
+            <controlpoint PositionX="588" PositionY="524" />
+         </transition>
+         <transition start="p2" token="c" end="p2">
+            <controlpoint PositionX="653" PositionY="409" />
+            <controlpoint PositionX="682" PositionY="299" />
+            <controlpoint PositionX="762" PositionY="438" />
+            <controlpoint PositionX="653" PositionY="409" />
+         </transition>
+         <transition start="p2" token="a" end="p2">
+            <controlpoint PositionX="653" PositionY="409" />
+            <controlpoint PositionX="682" PositionY="299" />
+            <controlpoint PositionX="762" PositionY="438" />
+            <controlpoint PositionX="653" PositionY="409" />
+         </transition>
+         <transition start="p2" token="b" end="p0">
+            <controlpoint PositionX="653" PositionY="409" />
+            <controlpoint PositionX="588" PositionY="524" />
+         </transition>
+         <transition start="p0" token="a" end="p0">
+            <controlpoint PositionX="588" PositionY="524" />
+            <controlpoint PositionX="668" PositionY="604" />
+            <controlpoint PositionX="508" PositionY="604" />
+            <controlpoint PositionX="588" PositionY="524" />
+         </transition>
+         <transition start="p0" token="b" end="p0">
+            <controlpoint PositionX="588" PositionY="524" />
+            <controlpoint PositionX="668" PositionY="604" />
+            <controlpoint PositionX="508" PositionY="604" />
+            <controlpoint PositionX="588" PositionY="524" />
+         </transition>
+         <transition start="p0" token="c" end="p0">
+            <controlpoint PositionX="588" PositionY="524" />
+            <controlpoint PositionX="668" PositionY="604" />
+            <controlpoint PositionX="508" PositionY="604" />
+            <controlpoint PositionX="588" PositionY="524" />
+         </transition>
+         <transition start="p1" token="c" end="p1">
+            <controlpoint PositionX="521" PositionY="410" />
+            <controlpoint PositionX="430" PositionY="344" />
+            <controlpoint PositionX="588" PositionY="319" />
+            <controlpoint PositionX="521" PositionY="410" />
+         </transition>
+      </transitions>
+      <alphabet>
+         <token>b</token>
+         <token>a</token>
+         <token>c</token>
+      </alphabet>
+   </automata>
+</model>
+

@@ -1,0 +1,421 @@
+0 '''
+0 
+0 :Version: 30.05.2011
+0 
+0 :Authors:
+0     knopsa,
+0     Alexander Weigl (re-documentation for sphinx)
++ '''
+0 
++ import sys
++ import tempfile
++ from os import path
+0 
++ from xml.etree import ElementTree as ET
+0 
+0 
++ _DEA = "DEA"
++ _NEA = "NEA"
++ _ENEA = "ENEA"
++ _EPSILON = "\u03B5"
++ _EMPTYSET = "\u2205"
++ _KLEENE_STAR = "\u002A"
++ _ALTERNATION = "\u002B"
++ _LPARENTHESIS = "\u0028"
++ _RPARENTHESIS = "\u0029"
++ _DEFAULT_FILE = tempfile.gettempdir() + "/trap.xml"
+0 
+0 
+0 
+0 #
+0 # Different implementations
+0 # for Python 2 and Python 3 compatibility.
+0 #
++ if sys.version_info[0] < 3:
+0 #    print("Trap doesn't support Python " +
+0 #     		sys.version_info[0].__str__()+ ".X!")
++     _python_input = raw_input
+0 else:
+-     _python_input = input
+0 
+0 
++ def load(filename = None, alt_order = False):
+0     """Loads a model from the given path.
+0 
+0     Parameter:
+0     :param filename: the path of the source-file
+0     :param alt_order: the order of the tulple in case of an automata.
+0                       If false then[Q, Sigma, delta, start, F]
+0                       else [Sigma, Q, delta, start, F]
+0 
+0     The Return-value is a finite state machine or a regular expression.
+0 
+0     Finite State Machine:
+0     A finite state Machine is a list
+0     [Q, Sigma, delta, start, F] or [Sigma, Q, delta, start, F] with
+0     - Q is a set of states (set of int values)
+0     - Sigma is a a alphabet (set of str values of length 1)
+0     - delta is the transition function  (dictionary)
+0     - start is the start-state (int value)
+0     - F is a set of accept states (set of int values)
+0 
+0     Regular Expression:
+0     The return value is a list [exp, Sigma] with
+0     - exp is the regular Expression (str vaule)
+0     - Sigma is a a alphabet (set of int values)
+0 
+0     :return: a list of five elements, see above
+0     """
+0 
++     def read_alphabet(xml_EA):
+0         """Creates a set (Alphabet) from an ElementTree.Element"""
+0 
++         token_Set = set([])
++         for token in xml_EA.find("alphabet"):
++             token_Set.add(token.text)
++         return token_Set
+0 
++     def load_ea(xml_EA, alt_order):
+0         """Creates a finite state machine Machine from Element"""
+0 
+0         #
+0         # read states
+0         #
++         is_DEA = xml_EA.attrib["type"] == _DEA
++         xml_states = xml_EA.find("states")
++         str_state_set = set([])
++         int_state_set = set([])
++         str_accepting_set = set([])
++         state_map = {}
++         for xml_state in xml_states:
++             str_state = xml_state.attrib["name"]
++             if str_state.isdigit() and (len(str_state) == 1 or str_state[0] != "0"):
+-                 state_map[str_state] = int(str_state)
+-                 int_state_set.add(state_map[str_state])
+0             else:
++                 str_state_set.add(str_state)
++             if xml_state.attrib["accepting"].lower() == "true":
++                 str_accepting_set.add(str_state)
++         i = 0
+0 
++         for str_state in sorted(str_state_set):
++             while i in int_state_set:
++                 i += 1
++             int_state_set.add(i)
++             state_map[str_state] = i
+0             #
+0         # create Accepting Set
+0         #
++         int_accepting_set = set([])
++         for str_state in str_accepting_set:
++             int_accepting_set.add(state_map[str_state])
+0 
+0 
+0         #
+0         # read Transitons
+0         #
++         delta = {}
++         xml_transitions = xml_EA.find("transitions")
++         for xml_trans in xml_transitions:
++             start = xml_trans.attrib["start"]
++             end = xml_trans.attrib["end"]
++             token = xml_trans.attrib["token"]
++             if is_DEA:
++                 delta[state_map[start], token] = state_map[end]
+-             elif (state_map[start], token) in delta:
+-                 delta[state_map[start], token].add(state_map[end])
+0             else:
+-                 delta[state_map[start], token] = set([state_map[end]])
+0 
++         start_state = state_map[xml_EA.find("startState").attrib["name"]]
+0 
++         ea = [int_state_set, read_alphabet(xml_EA), delta, start_state, int_accepting_set]
++         if alt_order == True:
+-             ea = _twist(ea)
+0 
+0         #weigl:        print(xml_EA.attrib["type"] + " loaded")
++         return ea
+0 
++     def load_regex(xml_regex):
+0         """Creates a  regular Expression from an ElementTree.Element"""
+0 
+-         str_exp = xml_regex.find("expression").text
+-         sigma = read_alphabet(xml_regex)
+0 
+-         print("reg. Expression" + " loaded")
+-         return str_exp, sigma
+0 
+0 
++     try:
++         if filename == None:
+-             if not path.isfile(_DEFAULT_FILE):
+-                 print("File does not exist")
+-                 return None
+-             filename = _DEFAULT_FILE
+0 
++         tree = ET.parse(filename)
++         xml_EA = tree.find("automata")
++         xml_EA
++         if(xml_EA != None):
++             return load_ea(xml_EA, alt_order)
+0         else:
+-             xml_regex = tree.find("regularExpression")
+-             if(xml_regex != None):
+-                 return load_regex(xml_regex)
+0             else:
+-                 print("Illegal file format")
+-                 return None
+-     except IOError as e:
+-         print("'" + e.filename + "'" + ": " + e.strerror)
+-         return None
+-     except KeyError as e:
+-         print(e.__str__() + " is not a State")
+-         return None
+0 
+0 
++ def save_dea(dea, filename = None, alt_order = False):
+0     """Writes an DEA to the given file.
+0 
+0     :param dea: an deterministic finite-state machines
+0     :param filename: the path of the target-file
+0     :param alt_order: the order of the DEA-tulple
+0                     false:  [Q, Sigma, delta, start, F]
+0                     true: [Sigma, Q, delta, start, F]
+0 
+0 
+0     :return: true, if the file was written successfully.
+0 
+0      A deterministic finite-state Machine is a list
+0     [Q, Sigma, delta, start, F] with
+0     - Q is a set of states (set of int values)
+0     - Sigma is a a alphabet (set of str values of length 1)
+0     - delta is the transition function
+0       (dictionary: state X token -> state)
+0     - start is the start-state (int value)
+0     - F is a set of accept states (set of int values)
+0     """
+-     if alt_order == True:
+-         dea = _twist(dea)
+-     return _save_ea(filename, dea, _DEA)
+0 
+0 
++ def save_nea(nea, filename = None, alt_order = False):
+0     """Writes an NEA to the given file.
+0 
+0     :param nea: an nondeterministic finite-state machines
+0     :param filename: the path of the target-file
+0     :param alt_order: the order of the NEA-tulple
+0                  false:  [Q, Sigma, delta, start, F]
+0                  true: [Sigma, Q, delta, start, F]
+0 
+0     :return: true iff the file was written successfully.
+0 
+0     A nondeterministic finite-state machines with epsilon moves Machine is a
+0     list  [Q, Sigma, delta, start, F] with
+0     - Q is a set of states (set of int values)
+0     - Sigma is a a alphabet (set of str values of length 1)
+0     - delta is the transition function
+0       (dictionary: state X (token + epsilon) -> set of states)
+0     - start is the start-state (int value)
+0     - F is a set of accept states (set of int values)
+0 
+0     """
+-     if alt_order == True:
+-         nea = _twist(nea)
+-     return _save_ea(filename, nea, _NEA)
+0 
+0 
++ def save_enea(enea, filename = None, alt_order = False):
+0     """Writes an ENEA to the given file.
+0 
+0     :param enea: an nondeterministic finite-state machines  with epsilon moves
+0     :param filename: the path of the target-file
+0     :param alt_order:
+0         the order of the ENEA-tulple
+0         false:  [Q, Sigma, delta, start, F]
+0         true: [Sigma, Q, delta, start, F]
+0 
+0     :return:true, iff the file was written successfully.
+0 
+0     A nondeterministic finite-state machines with epsilon moves is a
+0     list  [Q, Sigma, delta, start, F] with
+0     - Q is a set of states (set of int values)
+0     - Sigma is a a alphabet (set of str values of length 1)
+0     - delta is the transition function
+0       (dictionary: state X (token + epsilon) -> set of states)
+0     - start is the start-state (int value)
+0     - F is a set of accept states (set of int values)
+0     """
+-     if alt_order == True:
+-         enea = _twist(enea)
+-     return _save_ea(filename, enea, _ENEA)
+0 
+0 
++ def _save_ea(filename, ea, type):
+0     """Writes an EA to a file."""
+0 
+-     def add_transition(xml_transitions, from_state, token, to_state):
+-         xml_trans = ET.SubElement(xml_transitions, "transition")
+-         xml_trans.attrib["start"] = from_state .__str__()
+-         xml_trans.attrib["token"] = token.__str__()
+-         xml_trans.attrib["end"] = to_state.__str__()
+0 
+-     type = type.upper()
+0 
+-     if is_ea_consistent(ea, type) == False:
+-         return False
+0 
+-     [states, alphabet, delta, start_state, accepting_set] = ea
+0 
+-     xml_model = ET.Element("model")
+0 
+-     xml_automata = ET.SubElement(xml_model, "automata", {"type": type})
+0 
+-     ET.SubElement(xml_automata, "startState", {"name": start_state.__str__()})
+0 
+-     xml_states = ET.SubElement(xml_automata, "states")
+0 
+-     for state in states:
+-         xml_state = ET.SubElement(xml_states, "state")
+-         xml_state.attrib["name"] = state.__str__()
+-         xml_state.attrib["accepting"] = (state in accepting_set).__str__().lower()
+0 
+-     xml_transitions = ET.SubElement(xml_automata, "transitions")
+-     for q, t in delta:
+-         if type == _DEA:
+-             add_transition(xml_transitions, q, t, delta[q, t])
+0         else:
+-             for q2 in delta[q, t]:
+-                 add_transition(xml_transitions, q, t, q2)
+0 
+-     xml_automata.append(_create_alphabet(alphabet))
+0 
+-     tree = ET.ElementTree(xml_model)
+-     return _write(tree, filename, type.upper())
+0 
+0 
++ def is_ea_consistent(ea, type):
+0     """ Checks if the given ea is consistent.
+0 
+0     :return:
+0         false, iff the ea uses any state/token,
+0         which is not a member of the state-set/ alphabet.
+0     """
+0 
+-     [states, alphabet, delta, start_state, accepting_set] = ea
+0 
+-     if not is_sigma_consistent(alphabet):
+-         return False
+0 
+-     for q in accepting_set:
+-         if q not in states:
+-             print(q.__str__() + " is not a State")
+-             return False
+0 
+-     if type not in (_DEA, _NEA, _ENEA):
+-         print("Illegal type '" + type + "'")
+-         return False
+0 
+-     if start_state not in states:
+-         print(start_state.__str__() + " is not a State")
+-         return False
+0 
+-     for q, t in delta:
+-         if t not in alphabet  and not( t == _EPSILON and type == _ENEA):
+-             print(t.__str__() + " is not a Token")
+-             return False
+-         if q not in states:
+-             print(q.__str__() + " is not a State")
+-             return False
+0 
+-         if type == _DEA:
+-             if delta[q, t] != None and delta[q, t] not in states:
+-                 print(delta[q, t].__str__() + " is not a State")
+-                 return False
+0         else:
+-             for q2 in delta[q, t]:
+-                 if q2 not in states:
+-                     print(q2.__str__() + " is not a State")
+-                     return False
+0 
+0 
++ def is_sigma_consistent(sigma):
+-     for t in sigma:
+-         if type(t) != str:
+-             print("Illegal alphabet token")
+-             return False
+-         if len(t) != 1:
+-             print("Illegal alphabet token '" + t + "'")
+-             return False
+-         if t in (_EPSILON, _EMPTYSET, _KLEENE_STAR, _ALTERNATION, _RPARENTHESIS, _LPARENTHESIS ):
+-             print("Illegal special token '" + t + "'")
+-             return False
+-     return True
+0 
+0 
++ def save_regex(expression, sigma, file_name = None):
+0     """Writes an regular Expression to the given file.
+0 
+0     :param expression: The regular Expression.
+0     :param sigma: the Alphabet.
+0     :param file_name: The name of the file.
+0 
+0     :return: true, iff the file was written successfully.
+0     """
+-     if not is_sigma_consistent(sigma):
+-         return False
+-     xml_model = ET.Element("model")
+-     xml_regex = ET.SubElement(xml_model, "regularExpression")
+0 
+-     xml_exp = ET.SubElement(xml_regex, "expression")
+-     xml_exp.text = expression
+0 
+-     xml_regex.append(_create_alphabet(sigma))
+0 
+-     tree = ET.ElementTree(xml_model)
+-     return _write(tree, file_name, "reg. Expression")
+0 
+0 
++ def _twist(ea):
+-     [A, B, delta, q0, F] = ea
+-     return [B, A, delta, q0, F]
+0 
+0 
++ def _write(tree, filename, type):
+0     """Writes a ElementTree to a file."""
+-     message = type + " saved"
+-     try:
+-         if filename != None:
+-             if path.isfile(filename):
+-                 print("File does already exist!")
+-                 choice = None
+-                 while choice == None:
+-                     print('Do you want to replace the existing file? "Yes"/"No"')
+-                     choice = _python_input().lower()
+0 
+-                     if choice != "yes" and choice != "no":
+-                         choice = None
+-                 if choice == "no":
+-                     print("Canceled")
+-                     return None
+-             message = message + "(" + filename + ")"
+0         else:
+-             filename = _DEFAULT_FILE
+0 
+-         tree.write(filename, encoding = "UTF-8")
+-         print(message)
+-         return True
+0 
+-     except IOError as e:
+-         print("'" + e.filename + "'" + ": " + e.strerror)
+-         return False
+0 
+0 
++ def _create_alphabet(sigma):
+0     """Creates a subtree from an alphabet."""
+-     xml_alphabet = ET.Element("alphabet")
+-     for t in sigma:
+-         xml_token = ET.SubElement(xml_alphabet, "token")
+-         xml_token.text = t.__str__()
+-     return xml_alphabet
+0 

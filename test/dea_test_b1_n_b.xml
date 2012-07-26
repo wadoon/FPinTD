@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+   <automata type="DEA">
+      <startState name="q1" />
+      <states>
+         <state name="q2" accepting="true" PositionX="545" PositionY="126" />
+         <state name="q1" accepting="false" PositionX="376" PositionY="127" />
+      </states>
+      <transitions>
+         <transition start="q1" token="b" end="q2">
+            <controlpoint PositionX="376" PositionY="127" />
+            <controlpoint PositionX="460" PositionY="157" />
+            <controlpoint PositionX="545" PositionY="126" />
+         </transition>
+         <transition start="q1" token="c" end="q2">
+            <controlpoint PositionX="376" PositionY="127" />
+            <controlpoint PositionX="460" PositionY="157" />
+            <controlpoint PositionX="545" PositionY="126" />
+         </transition>
+         <transition start="q2" token="b" end="q1">
+            <controlpoint PositionX="545" PositionY="126" />
+            <controlpoint PositionX="460" PositionY="96" />
+            <controlpoint PositionX="376" PositionY="127" />
+         </transition>
+         <transition start="q1" token="a" end="q1">
+            <controlpoint PositionX="376" PositionY="127" />
+            <controlpoint PositionX="485" PositionY="158" />
+            <controlpoint PositionX="345" PositionY="236" />
+            <controlpoint PositionX="376" PositionY="127" />
+         </transition>
+         <transition start="q2" token="c" end="q2">
+            <controlpoint PositionX="545" PositionY="126" />
+            <controlpoint PositionX="625" PositionY="46" />
+            <controlpoint PositionX="625" PositionY="206" />
+            <controlpoint PositionX="545" PositionY="126" />
+         </transition>
+         <transition start="q2" token="a" end="q2">
+            <controlpoint PositionX="545" PositionY="126" />
+            <controlpoint PositionX="625" PositionY="46" />
+            <controlpoint PositionX="625" PositionY="206" />
+            <controlpoint PositionX="545" PositionY="126" />
+         </transition>
+      </transitions>
+      <alphabet>
+         <token>b</token>
+         <token>a</token>
+         <token>c</token>
+      </alphabet>
+   </automata>
+</model>
+

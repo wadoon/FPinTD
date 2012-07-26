@@ -1,0 +1,50 @@
+digraph G {
+graph [rankdir=LR]
+node [filled=false, shape=circle]
+start [filled=false, color=white, label=""]
+p11 -> p11 [label="c";
+p10 -> p10 [label="a";
+p11 -> p9 [label="b";
+p6 -> p6 [label="b";
+p8 -> p7 [label="a";
+p4 -> p8 [label="c";
+p4 -> p6 [label="b";
+p6 -> p8 [label="c";
+p1 -> p1 [label="c";
+p1 -> p1 [label="b";
+p2 -> p1 [label="b";
+p7 -> p6 [label="b";
+p0 -> p3 [label="c";
+p2 -> p4 [label="a";
+p0 -> p2 [label="a";
+p5 -> p10 [label="a";
+p5 -> p11 [label="c";
+p11 -> p10 [label="a";
+p10 -> p9 [label="b";
+p3 -> p5 [label="c";
+p9 -> p9 [label="b";
+p7 -> p7 [label="a";
+p5 -> p9 [label="b";
+p0 -> p1 [label="b";
+p7 -> p8 [label="c";
+p3 -> p1 [label="b";
+p3 -> p1 [label="a";
+p9 -> p11 [label="c";
+p2 -> p1 [label="c";
+p1 -> p1 [label="a";
+p9 -> p10 [label="a";
+p8 -> p6 [label="b";
+p6 -> p7 [label="a";
+p4 -> p7 [label="a";
+p10 -> p11 [label="c";
+p8 -> p8 [label="c";
+p6 [shape=doublecircle];
+p5 [shape=doublecircle];
+p8 [shape=doublecircle];
+p7 [shape=doublecircle];
+p4 [shape=doublecircle];
+p10 [shape=doublecircle];
+p11 [shape=doublecircle];
+p9 [shape=doublecircle];
+start -> p0;
+}
