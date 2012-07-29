@@ -1,11 +1,12 @@
 Forbidden Patterns in Transition Diagrams
 ===============================================================================
 
-	License:         gpl-3
+    License:         gpl-3
     Author:          Alexander Weigl <weigla@fh-trier.de>
     Date:            31. Juli 2012
     Documentation:   http://fpintd.readthedocs.org
 
+[![Build Status](https://secure.travis-ci.org/areku/FPinTD.png?branch=master)](http://travis-ci.org/areku/FPinTD)
 
 This software package provides facilities for detecting forbidden pattern in deterministic finite automata (DFA).
 DFA should be created with TrAP[^1] and saved for reading in with the _trap_ Python Module or by using the _dfa_ module.
