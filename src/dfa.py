@@ -87,11 +87,12 @@ class DFA(object):
     """
     
     def __init__(self, init):
+
         if type(init) is str:
             self.filename = init
             init = trap.load(init)
 
-        self._revDEA =  None
+        self._revDFA =  None
         self._reachables = None
         self._reachables = None
         self._productautomata = {1:self} # memoization for productautomata
@@ -137,9 +138,9 @@ class DFA(object):
     @property 
     def reverse(self): 
         """get the reverse dea"""
-        if self._revDEA is None: 
-            self._revDEA =  DEAr(self)
-        return self._revDEA    
+        if self._revDFA is None: 
+            self._revDFA =  DFAr(self)
+        return self._revDFA    
 
     def __invert__(self): 
         return self.reverse
@@ -412,7 +413,7 @@ digraph G {
             witness[state] = word[1:][::-1]
         return Z,witness
 
-class DEAr(DFA): 
+class DFAr(DFA): 
     """
     Should not constructed directly by the user.
 
