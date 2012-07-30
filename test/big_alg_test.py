@@ -31,9 +31,10 @@ TIMES  = { (m,a) : list()
 
 def run(module, algname, dea):
     t0 = time.time() * 1000
-    return getattr(module,algname)(dea)
+    w =  getattr(module,algname)(dea)
     t1 = time.time() * 1000
-    TIMES[m,a].append(t1-t0) 
+    TIMES[module,algname].append(t1-t0) 
+    return w
 
 class BigAlgorithmTest(unittest.TestCase):
     def setUp(self):
@@ -44,10 +45,12 @@ class BigAlgorithmTest(unittest.TestCase):
         if not os.path.exists("hierarchy"):
             d = "test/"+d
         
-        for fil in os.listdir(d):
+
+        for fil in os.listdir(d)[:500]: # only 500 dfa
             if not fnmatch(fil, "dea_test_*.xml"):
                 continue
-            dea = DFA(os.path.join(d,fil))
+            f = os.path.join(d,fil)
+            dea = DFA(f)
             print("Checking: %s" % fil, end = " ")
             #expected = table[fil[9:12].strip("_")]
             
@@ -58,17 +61,20 @@ class BigAlgorithmTest(unittest.TestCase):
                     print(a, end = " ")
             print()
 
+        for (m,a),v in TIMES.items():
+            print("%s (%s): mean: %f std: %f" %( m.__name__,a, mean(v), std(v)))
+
 import math
 def mean(l):
+    if len(l) == 0:
+        return 0
     return float(sum(l))/len(l)
 
 def std(l):
     m = mean(l)
-    return math.sqrt( mean( map ( lambda x: (x-m)**2, l)))
+    return math.sqrt( mean( list(map ( lambda x: (x-m)**2, l))))
 
 
 
 if __name__ == "__main__":
     unittest.main()
-    for k,v in TIMES.items():
-        print("%s: mean: %f std: %f" %( k, mean(v), std(v)))

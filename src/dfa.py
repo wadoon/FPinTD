@@ -87,7 +87,6 @@ class DFA(object):
     """
     
     def __init__(self, init):
-
         if type(init) is str:
             self.filename = init
             init = trap.load(init)
