@@ -7,7 +7,6 @@ witnesses from the forbidden pattern algorithm.
 __author__ = "Alexander Weigl <weigla@fh-trier.de>"
 __date__ = "2012-06-12"
 
-
 from dfa import valid_witness
 
 class WitnessChecker(object):
@@ -67,13 +66,13 @@ class WitnessChecker(object):
         return string
 
     def __repr__(self):
-        return "WitnessChecker(%s,%s)" % \
+        return "WitnessChecker(%s,%s)" %\
                (repr(self.spec), repr(self.call_checkers))
 
     def __call__(self, dea, witness):
         if not valid_witness(witness):
             return False
-        
+
         for chck in self.call_checkers:
             chck(dea, witness)
 
@@ -88,11 +87,11 @@ def generateParser():
     import ply.yacc as yacc
     import ply.lex as lex
 
-    literals = ("-", "," , '#')
-    tokens = ["DELIM", "NAME" , "ANTI",  "ARROW", "SMALLER" ]
-    t_DELIM  = r"(\n|;)"
-    t_ANTI   = r"<[#]>"
-    t_ARROW  =r"->"
+    literals = ("-", ",", '#')
+    tokens = ["DELIM", "NAME", "ANTI", "ARROW", "SMALLER"]
+    t_DELIM = r"(\n|;)"
+    t_ANTI = r"<[#]>"
+    t_ARROW = r"->"
     t_ignore = " \t"
     t_SMALLER = r"<="
 
@@ -100,10 +99,10 @@ def generateParser():
         r'[a-zA-Z_0-9\']+'
         return t
 
-#    def t_newline(t):
-#        r"\n+"
-#        t.lexer.lineno += t.value.count("\n")
-#        t.type = "DELIM"
+    #    def t_newline(t):
+    #        r"\n+"
+    #        t.lexer.lineno += t.value.count("\n")
+    #        t.type = "DELIM"
 
 
     def t_error(t):
@@ -129,7 +128,7 @@ def generateParser():
         '''def :  NAME '-' NAME ARROW NAME
                |  NAME '-' NAME ARROW NAME '-' NAME'''
         if len(p) == 8:
-            p[5] = p[5]+ "\\" +p[7]
+            p[5] = p[5] + "\\" + p[7]
         p[0] = path(p[1], p[3], p[5])
 
 
@@ -140,28 +139,28 @@ def generateParser():
     def p_def_neq(p):
         '''def : NAME '#' NAME'''
         p[0] = neq(p[1], p[3])
-        
+
     def p_def_alpha(p):
         '''def : NAME SMALLER NAME'''
-        p[0] = alpha(p[1],p[3])
+        p[0] = alpha(p[1], p[3])
 
 
     def p_error(t):
         if t:
             print("Syntax error at value '%s' on line %d:%d" % (t, t.lineno, t.lexpos))
 
-    def find_column(input,token):
-        last_cr = input.rfind('\n',0,token.lexpos)
+    def find_column(input, token):
+        last_cr = input.rfind('\n', 0, token.lexpos)
         if last_cr < 0:
             last_cr = 0
         column = (token.lexpos - last_cr) + 1
         return column
 
     lexer = lex.lex()
-    yacc.yacc( debug = False, write_tables = False)
+    yacc.yacc(debug=False, write_tables=False)
     return yacc
 
-_parser =  generateParser()
+_parser = generateParser()
 parseSpecification = lambda spec: _parser.parse(spec.strip())
 
 
@@ -180,13 +179,14 @@ class composable(object):
         else:
             return list((self, other))
 
+
 class alpha(composable):
     def __init__(self, *args):
         if len(args) == 1:
             self.word1, self.word2 = parseSpecification(args[0])
         else:
             self.word1, self.word2 = args
-        
+
     def _tuple(self):
         return self.word1, self.word2
 
@@ -196,16 +196,17 @@ class alpha(composable):
     def __str__(self):
         return "check if \alpha({0}) \subseteq \alpha({1})".format(*self._tuple())
 
-    def __call__(self, dea, witness, msg = ""):
+    def __call__(self, dea, witness, msg=""):
         w = witness[self.word1]
         v = witness[self.word2]
-        
+
         if not set(w) <= set(v):
-            raise Exception("alpha check failed for witness,v = (%s,%s) " % (witness,v))
-        #else:
+            raise Exception("alpha check failed for witness,v = (%s,%s) " % (witness, v))
+            #else:
         #    print(str(self), "is satisfied")
-        return True        
-        
+        return True
+
+
 class path(composable):
     def __init__(self, *args):
         if len(args) == 1:
@@ -224,36 +225,37 @@ class path(composable):
     def __str__(self):
         return "check if \hat \delta({0}, {1}) = {2}".format(*self._tuple())
 
-    def __call__(self, dea, witness, msg = ""):
+    def __call__(self, dea, witness, msg=""):
         #word = []
         #for witness in iterwords(self.words):
         #    word += witness[witness]
         try:
             word = witness[self.words]
-    
+
             start_state = witness[self.start]
             end_state = dea(start_state, word)
-    
-            if  self.target == "F":
+
+            if self.target == "F":
                 ret = end_state in dea.F
-            elif self.target in ("Q-F","Q\\F"):
+            elif self.target in ("Q-F", "Q\\F"):
                 ret = end_state in (dea.Q - dea.F)
             else:
                 target_state = witness[self.target]
                 ret = end_state == target_state
-    
+
             if not msg:
                 msg = "%s - %s -> %s" % (self.start, self.words, self.target)
-    
+
             if not ret:
                 raise Exception("path check failed: " + msg)
-            #else:
+                #else:
             #    print(str(self), "is satisfied")
             return True
-        
+
         except KeyError as e:
-            print(self._tuple() , witness,e)
+            print(self._tuple(), witness, e)
             raise Exception("witness %s not found" % e)
+
 
 class antivalence(composable):
     def __init__(self, *args):
@@ -271,26 +273,26 @@ class antivalence(composable):
     def __str__(self):
         return "check if \delta({0}, {1}) \in F <#> \delta({2},{3}) \\in F".format(*self._tuple())
 
-    def __call__(self,dea, witnesses, msg=""):
-#        word = []
-#        for witness in iterwords(word1):
-#            word += self.witness[witness]
+    def __call__(self, dea, witnesses, msg=""):
+    #        word = []
+    #        for witness in iterwords(word1):
+    #            word += self.witness[witness]
 
         try:
             start1 = witnesses[self.state1]
             start2 = witnesses[self.state2]
-            word1  = witnesses[self.word1]
-            word2  = witnesses[self.word2]
-    
+            word1 = witnesses[self.word1]
+            word2 = witnesses[self.word2]
+
             end1 = dea(start1, word1)
             end2 = dea(start2, word2)
-    
+
             if not ((end1 in dea.F) ^ (end2 in dea.F )):
-                raise Exception("failed: " + str(self) )
+                raise Exception("failed: " + str(self))
         except KeyError as e:
-            print(self._tuple() , witnesses,e)
-            raise Exception("witness %s not found" % e) 
-    
+            print(self._tuple(), witnesses, e)
+            raise Exception("witness %s not found" % e)
+
 
 class neq(composable):
     def __init__(self, *args):
@@ -303,7 +305,7 @@ class neq(composable):
         return self.state1, self.state2
 
     def __repr__(self):
-        return "path('{0} # {1}')" .format(*self._tuple())
+        return "path('{0} # {1}')".format(*self._tuple())
 
     def __str__(self):
         return "check if {0} \\neq {0}".format(*self._tuple())
@@ -386,18 +388,18 @@ checkWitnessL32 = WitnessChecker("""
     w <= v
 """)
 
-def t(dea,witness):
+def t(dea, witness):
     try:
-        return checkWitnessL1_1(dea,witness[0]) and checkWitnessL1_2(dea,witness[1]),
+        return checkWitnessL1_1(dea, witness[0]) and checkWitnessL1_2(dea, witness[1]),
     except Exception as e:
         raise e
 
 CHECKERS = {
-            'l12': checkWitnessL12, 
-            'b12': checkWitnessB12, 
-            'l1' : t,#lambda dea, witness: checkWitnessL1_1(dea,witness[0]) and checkWitnessL1_2(dea,witness[1]), 
-            'b1' : checkWitnessB1, 
-            'l32': checkWitnessL32, }        
+    'l12': checkWitnessL12,
+    'b12': checkWitnessB12,
+    'l1': t, #lambda dea, witness: checkWitnessL1_1(dea,witness[0]) and checkWitnessL1_2(dea,witness[1]),
+    'b1': checkWitnessB1,
+    'l32': checkWitnessL32, }
 
 if __name__ == "__main__":
     print("Witness Checkers:")

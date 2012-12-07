@@ -39,7 +39,7 @@ else:
     _python_input = input
 
 
-def load(filename = None, alt_order = False):
+def load(filename=None, alt_order=False):
     """Loads a model from the given path.
 
     Parameter:
@@ -156,11 +156,11 @@ def load(filename = None, alt_order = False):
         tree = ET.parse(filename)
         xml_EA = tree.find("automata")
         xml_EA
-        if(xml_EA != None):
+        if (xml_EA != None):
             return load_ea(xml_EA, alt_order)
         else:
             xml_regex = tree.find("regularExpression")
-            if(xml_regex != None):
+            if (xml_regex != None):
                 return load_regex(xml_regex)
             else:
                 print("Illegal file format")
@@ -173,7 +173,7 @@ def load(filename = None, alt_order = False):
         return None
 
 
-def save_dea(dea, filename = None, alt_order = False):
+def save_dea(dea, filename=None, alt_order=False):
     """Writes an DEA to the given file.
     
     :param dea: an deterministic finite-state machines
@@ -199,7 +199,7 @@ def save_dea(dea, filename = None, alt_order = False):
     return _save_ea(filename, dea, _DEA)
 
 
-def save_nea(nea, filename = None, alt_order = False):
+def save_nea(nea, filename=None, alt_order=False):
     """Writes an NEA to the given file.
     
     :param nea: an nondeterministic finite-state machines
@@ -225,7 +225,7 @@ def save_nea(nea, filename = None, alt_order = False):
     return _save_ea(filename, nea, _NEA)
 
 
-def save_enea(enea, filename = None, alt_order = False):
+def save_enea(enea, filename=None, alt_order=False):
     """Writes an ENEA to the given file.
 
     :param enea: an nondeterministic finite-state machines  with epsilon moves
@@ -256,7 +256,7 @@ def _save_ea(filename, ea, type):
 
     def add_transition(xml_transitions, from_state, token, to_state):
         xml_trans = ET.SubElement(xml_transitions, "transition")
-        xml_trans.attrib["start"] = from_state .__str__()
+        xml_trans.attrib["start"] = from_state.__str__()
         xml_trans.attrib["token"] = token.__str__()
         xml_trans.attrib["end"] = to_state.__str__()
 
@@ -321,7 +321,7 @@ def is_ea_consistent(ea, type):
         return False
 
     for q, t in delta:
-        if t not in alphabet  and not( t == _EPSILON and type == _ENEA):
+        if t not in alphabet and not ( t == _EPSILON and type == _ENEA):
             print(t.__str__() + " is not a Token")
             return False
         if q not in states:
@@ -353,7 +353,7 @@ def is_sigma_consistent(sigma):
     return True
 
 
-def save_regex(expression, sigma, file_name = None):
+def save_regex(expression, sigma, file_name=None):
     """Writes an regular Expression to the given file.
     
     :param expression: The regular Expression.
@@ -402,7 +402,7 @@ def _write(tree, filename, type):
         else:
             filename = _DEFAULT_FILE
 
-        tree.write(filename, encoding = "UTF-8")
+        tree.write(filename, encoding="UTF-8")
         print(message)
         return True
 

@@ -26,33 +26,35 @@ import ply.yacc as yacc
 #__all__ = ["generateCode"]
 
 reserved = {
-    'in' : 'IN',
+    'in': 'IN',
 }
 
-
-tokens = ["INVSTMT" , "NAME", "LPAREN", "RPAREN", "COMMA","ARROW", "MINUS"] + list(reserved.values())
+tokens = ["INVSTMT", "NAME", "LPAREN", "RPAREN", "COMMA", "ARROW", "MINUS"] + list(reserved.values())
 
 t_LPAREN = r"\("
 t_RPAREN = r"\)"
-t_COMMA  = r","
-t_ARROW  = r"->"
-t_MINUS  = r"-"
+t_COMMA = r","
+t_ARROW = r"->"
+t_MINUS = r"-"
 t_ignore = " \t"
 
 
 def t_NAME(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'NAME')    # Check for reserved words
+    t.type = reserved.get(t.value, 'NAME')    # Check for reserved words
     return t
+
 
 def t_INVSTMT(t):
     r'\[.*?\]'
     t.value = t.value.strip("[]")
     return t
 
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
+
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
@@ -70,28 +72,33 @@ def p_slist_stmt(t):
     t[1].innerBlock = "return True"
     t[0] = t[1]
 
+
 def p_slist_recur(t):
     '''slist : slist statement'''
     t[1].innerBlock = t[2] #building a chained list
     t[0] = t[1]
 
+
 def p_statement_in(t):
     '''statement : LPAREN plist RPAREN IN NAME INVSTMT'''
     print("InStatement")
-    t[0] = InStatement( t[2], t[5], t[6])
+    t[0] = InStatement(t[2], t[5], t[6])
+
 
 def p_statement_bfs(t):
     '''statement : NAME MINUS NAME ARROW NAME  INVSTMT'''
-    t[0] = BfsStatement( t[1] , t[3], t[5], t[6])
+    t[0] = BfsStatement(t[1], t[3], t[5], t[6])
+
 
 def p_plist_recur(t):
     '''plist : plist COMMA NAME'''
     t[1].append(t[3])
     t[0] = t[1]
 
+
 def p_plist_NAME(t):
     '''plist : NAME'''
-    t[0] = list(( t[1] , ))
+    t[0] = list(( t[1], ))
 
 
 def p_error(t):
@@ -101,9 +108,10 @@ def p_error(t):
 yacc.yacc()
 
 
-def indent(string, level = 1, fmt = " " * 4):
-    s = fmt*level
-    return s+ string.replace("\n", "\n"+s)
+def indent(string, level=1, fmt=" " * 4):
+    s = fmt * level
+    return s + string.replace("\n", "\n" + s)
+
 
 def codegen(tupl):
     code = ""
@@ -112,7 +120,7 @@ def codegen(tupl):
     for obj in tupl:
         if type(obj) is tuple:
             s = indent(codegen(obj))
-            code += "\n"+s
+            code += "\n" + s
         else:
             if newline:
                 code += "\n"
@@ -123,7 +131,7 @@ def codegen(tupl):
 
 
 class InStatement(object):
-    def __init__(self, vars, inSet, invariant , innerBlock = ""):
+    def __init__(self, vars, inSet, invariant, innerBlock=""):
         self.vars = vars
         self.inSet = inSet
         self.invariant = "True" if invariant == "" else invariant
@@ -133,22 +141,23 @@ class InStatement(object):
         """code generation"""
         return codegen((
             "for (%s) in %s:" % (",".join(self.vars), self.inSet),
-                ("if %s:" % self.invariant,
-                    (self.innerBlock,))))
+            ("if %s:" % self.invariant,
+             (self.innerBlock,))))
+
 
 def BfsStatement(object):
-    def __init__(self, start, word, end, invariant, innerBlock = ""):
+    def __init__(self, start, word, end, invariant, innerBlock=""):
         self.start = start
-        self.word  = word
-        self.end   = end
+        self.word = word
+        self.end = end
         self.invariant = invariant
         self.innerBlock = innerBlock
 
     def __str__(self):
-        ib = indent(str(self.innerBlock),2)
-        return "for (%s,%s) in dea.search(%s):\n\tif %s:\n%s" %(
-                    self.end, self.word, self.start, self.invariant, ib
-                )
+        ib = indent(str(self.innerBlock), 2)
+        return "for (%s,%s) in dea.search(%s):\n\tif %s:\n%s" % (
+            self.end, self.word, self.start, self.invariant, ib
+            )
 
 
 def generateCode(spec):
@@ -156,7 +165,7 @@ def generateCode(spec):
     :param spec: a str
     :return: the generated code with a str:
     """
-    return str( yacc.parse( spec ) )
+    return str(yacc.parse(spec))
 
 if __name__ == "__main__":
     for s in ("q -v-> q", "[]", "[q=p]", "(p,r,a) in T"):

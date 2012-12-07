@@ -21,11 +21,12 @@ def l12( dfa ):
 
     for (d, f) in A2.Q:
         if d in dfa.F and f not in dfa.F:
-            for ((p,q), z) in A2r.search((d, f), True): #with epsilon
+            for ((p, q), z) in A2r.search((d, f), True): #with epsilon
                 witness = dfa.reachable(p, q)
                 if witness:
                     return {"w": witness, "z": z[::-1], "+": d, "-": f, "p": p, "q": q}
     return {}
+
 
 def b12( dfa ):
     """
@@ -38,13 +39,14 @@ def b12( dfa ):
 
     for (d, f) in A2.Q:
         if d in dfa.F and f not in dfa.F:
-            for ((p,q), z) in A2r.search((d, f), True): #with epsilon
+            for ((p, q), z) in A2r.search((d, f), True): #with epsilon
                 witness = dfa.reachable(p, q)
                 if witness:
                     v = A2.reachable((p, q), (p, q))
                     if v:
                         return {"w": witness, "z": z[::-1], "+": d, "-": f, "p": p, "q": q, "v": v}
     return {}
+
 
 def l1(dfa ):
     """
@@ -53,6 +55,7 @@ def l1(dfa ):
     :return:
     """
     return l1_1(dfa), l1_2(dfa)
+
 
 def l1_1(dfa ):
     """
@@ -67,12 +70,13 @@ def l1_1(dfa ):
 
     for r, t in A2.Q:
         if (r in dfa.F) ^ (t in dfa.F):
-            for (p,q), z in A2r.search((r, t), True):
+            for (p, q), z in A2r.search((r, t), True):
                 if p in Z[q]:
                     #if p == q: continue
-                    witness, v = witness_w[p, q], witness_v[p,q]
-                    return  {"w": witness, "z": z[::-1], "r": r, "t": t, "p": p, "q": q, "v": v}
+                    witness, v = witness_w[p, q], witness_v[p, q]
+                    return {"w": witness, "z": z[::-1], "r": r, "t": t, "p": p, "q": q, "v": v}
     return False
+
 
 def l1_2(dfa ):
     A2 = dfa ** 2
@@ -81,9 +85,9 @@ def l1_2(dfa ):
     for (q, r, s) in A3.Q:
         for (q_, r_, s_), u in A3.search((q, r, s), True):
             if q_ == r_:
-                for  (q__, r__, s__), v in A3.search((q, q_, s_), True):
+                for (q__, r__, s__), v in A3.search((q, q_, s_), True):
                     if q__ == s__ and r__ == r and s == s__:
-                        for (d,f), z in A2.search((q_, s_)):
+                        for (d, f), z in A2.search((q_, s_)):
                             if (d in dfa.F) ^ (f in dfa.F):
                                 return {
                                     "z": z, "v": v, "u": u,
@@ -96,6 +100,7 @@ def l1_2(dfa ):
                                     "f": f
                                 }
     return {}
+
 
 def b1(dfa):
     A2 = dfa ** 2
@@ -112,7 +117,7 @@ def b1(dfa):
                             if witness:
                                 w_ = A3.reachable((q2, q5_, q4_), (q2, q5_, q4_))
                                 if w_:
-                                    for (d,f),z in A2.search((q5_, q4_), True):
+                                    for (d, f), z in A2.search((q5_, q4_), True):
                                         if (d in dfa.F) ^ (f in dfa.F):
                                             return {
                                                 "w": witness, "z": z, "v": v, "u": u,
@@ -134,14 +139,15 @@ def b1(dfa):
 def alpha(s):
     return set(iterwords(s))
 
+
 def l32( dfa ):
     A2 = dfa ** 2
     A2r = A2.reverse
 
     for (d, f) in A2.Q:
         if d in A2.F and f not in A2.F:
-            for ((p,q), z) in A2r.search((d, f), True): #with epsilon
-                v = A2.reachable((p,q),(p,q))
+            for ((p, q), z) in A2r.search((d, f), True): #with epsilon
+                v = A2.reachable((p, q), (p, q))
                 if v:
                     witness = dfa.reachable(p, q, alpha(v))
                     if witness:
