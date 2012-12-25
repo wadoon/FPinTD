@@ -1,7 +1,7 @@
 Forbidden Patterns in Transition Diagrams
 ===============================================================================
 
-    License:         gpl-3
+    License:         BSD
     Author:          Alexander Weigl <weigla@fh-trier.de>
     Date:            31. Juli 2012
     Documentation:   http://fpintd.readthedocs.org
@@ -29,14 +29,17 @@ With the _--user_ parameter you can make a user local installation.
 
 After installation you can call _fp_in_td_ script for checking DFAs in the TrAP[^1] file format.
 
+[1] http://trap.fh-trier.de/
+
 Literature 
 ---------------------------------------------------------------------------------
+
 
 *Primary:*
 
 [Sch00] Schmitz, Heinz: The Forbidden Pattern Approach to Concatenation Hierarchies. 2000. – https://fht.fh-trier.de/fileadmin/users/41/Publikationen/phd-thesis.pdf
 
-[Weigl12] Weigl, Alexander: Algorthims for Forbidden Pattern Detection in Transitiondiagrams; 2012.
+[Weigl12] Weigl, Alexander: Algorithms for Forbidden Pattern Detection in Transitiondiagrams; 2012.
 
 *Secondary:*
 
