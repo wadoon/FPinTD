@@ -171,6 +171,9 @@ class DFA(object):
         return False
 
     def __pow__(self, amount):
+        if amount == 1:
+            return self
+
         if amount in self._productautomata:
             return self._productautomata[amount]
 

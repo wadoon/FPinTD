@@ -27,9 +27,9 @@ These package can be installed with:
 
 With the _--user_ parameter you can make a user local installation.
 
-After installation you can call _fp_in_td_ script for checking DFAs in the TrAP[^1] file format.
+After installation you can call _fp_in_td_ script for checking DFAs in the TrAP[1] file format.
 
-[1] http://trap.fh-trier.de/
+[1]: http://trap.fh-trier.de/
 
 Literature 
 ---------------------------------------------------------------------------------
