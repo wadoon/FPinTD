@@ -34,13 +34,14 @@ figure("Runtime Measurement")
 yscale('log')
 
 xlim([0 , 20])
+ms = lambda l: map(lambda x: x*1000, l)
 
 for k,samples in data.items():
     samples = samples.items()
 
     x = map(first,samples)
-    y = map(first, map(second, samples))
-    e = map(second, map(second,samples))
+    y = ms(map(first, map(second, samples)))
+    e = ms(map(second, map(second,samples)))
 
     errorbar(x,y, yerr = e, fmt=FORMAT[k], label=LABEL[k])
 

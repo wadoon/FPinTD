@@ -5,7 +5,7 @@
 
 __author__ = "Alexander Weigl <Alexander.Weigl@student.kit.edu>"
 __date__ = "2012-12-07"
-__license__ = "gpl-3.0"
+__license__ = "bsd"
 
 from itertools import starmap
 from dfa import DFA
@@ -13,12 +13,16 @@ from dfa import DFA
 def first(*a):
     return a[0]
 
-
 def R(dfa, n, mode='R', filter_func=None):
     """
-    :param dfa:
-    :param n:
-    :return:
+    ..math:`R(\mathcal A,n) \mathdef \{ (s_1,s_2) ~|~ s_1,s_2 \in  Q^n \wedge \exists w \in \Sigma^+ \colon
+  \hat \delta(s_1,w) = s_2  \}`
+    
+
+    :param dfa: a dfa.DFA
+    :param n: power of the automaton (dfa**n)
+    :param mode: 'R' or 'D' for relation {(p,q) |... } or dictionary
+    :return: a set or dictionary
     """
 
     dfa = dfa ** n
@@ -35,27 +39,41 @@ def R(dfa, n, mode='R', filter_func=None):
 
 
 def Z(dfa):
+    """
+    ..math:`Z \mathdef \{ (p,q) \in Q ~|~
+    \exists w \in \Sigma^* \colon
+    \hat \delta((p,q), w,) \in F\times (Q\setminus F) \}`
+    """
     Z, w = dfa.inEquality()
     return Z
 
 
 def L(dfa, n):
+    """
+    ..math:
+      T(\dfa A,n) \mathdef \{~s \in Q^n ~|~ \{s\} \text{ is trivial in } \dfa A^n~\}.
+      L(\dfa A,n) \mathdef Q^n \setminus T(\dfa A,n)
+    """
     pa = dfa ** n
     T = pa.trivialComponents()
     return pa.Q - T
 
 
 def P(dfa, n):
+    """
+    ..math:`  P(\dfa A, n, q) \mapsto K \text{ with } K \in P(\mathcal A,n) \wedge q \in K`
+    """
     pa = dfa ** n
     scc = pa.tarjan()
-    return scc,
+    return scc
 
 
 def Pf(dfa, n):
     scc = P(dfa, n)
-    return {state: K
+    return {state : set(K)
             for K in scc
             for state in K}
+
 
 
 def l12(dfa):
@@ -65,6 +83,9 @@ def l12(dfa):
 def b12(dfa):
     return len(Z(dfa) & R(dfa, 1) & L(dfa, 2)) > 0
 
+
+def l1(dfa):
+    return l1_1(dfa) and l1_2(dfa)
 
 def l1_1(dfa):
     scc = Pf(dfa, 1)
@@ -80,7 +101,6 @@ def l1_2(dfa):
         if p == p_ and p != s and ((q, p, t), (s, r, s)) in _R:
             return True
     return False
-
 
 def b1(dfa):
     _R = R(dfa, 3)
@@ -135,7 +155,7 @@ def l32(dfa):
 class uvGraph(object):
     V_EDGE, U_EDGE = 0, 1
 
-    def __init__(self, dfa: DFA):
+    def __init__(self, dfa):
         self.dfa = dfa
         self.nodes = set()
         self.edges_u = dict()
@@ -195,7 +215,7 @@ class uvGraph(object):
         return uv_paths
 
 
-def b32(dfa: DFA):
+def b32(dfa):
     _R = R(dfa, 2)
     _Z = Z(dfa)
     _uvG = uvGraph(dfa)

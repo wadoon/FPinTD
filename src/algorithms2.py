@@ -89,7 +89,6 @@ def l1_1(dfa):
 
 
 def l1_2(dfa):
-    #A2 = dfa ** 2
     A3 = dfa ** 3  # not implemented A2*A
     Z, witness_z = dfa.inEquality()
 

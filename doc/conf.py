@@ -50,8 +50,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Recognition of Forbidden Pattern'
-copyright = u'2012, Alexander Weigl'
+project = 'Recognition of Forbidden Pattern'
+copyright = '2012, Alexander Weigl'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -91,7 +91,7 @@ exclude_patterns = ['_build']
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
-#show_authors = False
+show_authors = True
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -196,8 +196,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'RecognitionofForbiddenPattern.tex', u'Recognition of Forbidden Pattern Documentation',
-   u'Alexander Weigl', 'manual'),
+  ('index', 'RecognitionofForbiddenPattern.tex', 'Recognition of Forbidden Pattern Documentation',
+   'Alexander Weigl', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -226,8 +226,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'recognitionofforbiddenpattern', u'Recognition of Forbidden Pattern Documentation',
-     [u'Alexander Weigl'], 1)
+    ('index', 'recognitionofforbiddenpattern', 'Recognition of Forbidden Pattern Documentation',
+     ['Alexander Weigl'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -240,8 +240,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'RecognitionofForbiddenPattern', u'Recognition of Forbidden Pattern Documentation',
-   u'Alexander Weigl', 'RecognitionofForbiddenPattern', 'One line description of project.',
+  ('index', 'RecognitionofForbiddenPattern', 'Recognition of Forbidden Pattern Documentation',
+   'Alexander Weigl', 'RecognitionofForbiddenPattern', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -258,10 +258,10 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'Recognition of Forbidden Pattern'
-epub_author = u'Alexander Weigl'
-epub_publisher = u'Alexander Weigl'
-epub_copyright = u'2012, Alexander Weigl'
+epub_title = 'Recognition of Forbidden Pattern'
+epub_author = 'Alexander Weigl'
+epub_publisher = 'Alexander Weigl'
+epub_copyright = '2012, Alexander Weigl'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

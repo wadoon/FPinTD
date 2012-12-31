@@ -101,7 +101,6 @@ class DFA(object):
 
         self._Q, self._A, self._d, self._s, self._F = init
 
-
     @property
     def Q(self):
         """

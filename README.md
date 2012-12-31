@@ -13,7 +13,7 @@ DFA should be created with TrAP[^1] and saved for reading in with the _trap_ Pyt
 Both are includes in this package. There are two version of the algorithms for the following language class:
 
  * Straubing-Therien: 1/2, 1, 3/2
- * dot-depth hierarchy: 1/2, 1
+ * dot-depth hierarchy: 1/2, 1, 3/2
 
 for some Alphabet.
 
